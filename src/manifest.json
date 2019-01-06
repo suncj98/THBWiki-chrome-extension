@@ -4,6 +4,7 @@
   "description": "An unofficial extension for THBWiki.",
   "manifest_version": 2,
   "permissions": ["contextMenus","tabs"],
+  "homepage_url": "https://github.com/15PotatoShreds/THBWiki-chrome-extension",
   "background": {
     "scripts": ["./js/background.js"]
   },

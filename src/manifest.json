@@ -1,0 +1,14 @@
+{
+  "name": "THBWiki Ext",
+  "version": "0.1",
+  "description": "An unofficial extension for THBWiki.",
+  "manifest_version": 2,
+  "permissions": ["contextMenus","tabs"],
+  "background": {
+    "scripts": ["./js/background.js"]
+  },
+  "icons": {
+    "128": "statics/images/logo-128.png"
+  },
+  "omnibox": { "keyword" : "thb" }
+}

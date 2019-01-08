@@ -1,33 +1,32 @@
-function checkUnreadNotificationNum() {
-    if(checkLogin() === null) {
-        return
-    }
-    $.ajax({
-        url: 'https://thwiki.cc/api.php',
-        data: {
-            action: 'query',
-            format: 'json',
-            formatversion: 2,
-            meta: 'notifications',
-            notformat: "model",
-            notlimit: 25,
-            notprop: 'count',
-            uselang: "zh",
-            notfilter: "!read"
-        },
-        dataType: 'json',
-        success: function (result) {
-            console.log(result);
-            if (result.hasOwnProperty("query") &&
-                result.query.hasOwnProperty("notifications")) {
-                if (result.query.notifications.count === "0") {
-                    chrome.browserAction.setBadgeText({text: ""});
-                } else {
-                    chrome.browserAction.setBadgeText({text: String(result.query.notifications.count)});
+function checkUnreadNotificationNum(username) {
+    if(username !== null) {
+        $.ajax({
+            url: 'https://thwiki.cc/api.php',
+            data: {
+                action: 'query',
+                format: 'json',
+                formatversion: 2,
+                meta: 'notifications',
+                notformat: "model",
+                notlimit: 25,
+                notprop: 'count',
+                uselang: "zh",
+                notfilter: "!read"
+            },
+            dataType: 'json',
+            success: function (result) {
+                console.log(result);
+                if (result.hasOwnProperty("query") &&
+                    result.query.hasOwnProperty("notifications")) {
+                    if (result.query.notifications.count === "0") {
+                        chrome.browserAction.setBadgeText({text: ""});
+                    } else {
+                        chrome.browserAction.setBadgeText({text: String(result.query.notifications.count)});
+                    }
                 }
             }
-        }
-    });
+        });
+    }
 }
 
 function checkUnreadNotificationList() {

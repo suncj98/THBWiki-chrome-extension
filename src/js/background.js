@@ -1,3 +1,7 @@
 chrome.windows.onCreated.addListener(function () {
-    checkUnreadNotificationNum()
+    checkLogin(checkUnreadNotificationNum);
+});
+
+chrome.cookies.onChanged.addListener(function () {
+    checkLogin(checkUnreadNotificationNum);
 });

@@ -1,0 +1,53 @@
+.notificationWidget-list {
+    overflow-y: scroll;
+    max-height: 320px;
+}
+
+.notificationWidget-item-icon {
+    position: absolute;
+    left: 10px;
+}
+
+.notificationWidget-item-markRead {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+}
+
+.notificationWidget-item-markRead >img {
+    filter: grayscale(100%);
+    opacity: 0.6;
+}
+
+.notificationWidget-item-markRead >img:hover {
+    filter: none;
+    opacity: 1;
+}
+
+.notificationWidget-item-content {
+    display: inline-block;
+    margin: auto auto auto 24px;
+}
+
+.notificationWidget-item-content >a {
+    text-decoration:none;
+}
+
+.notificationWidget-item-header {
+    color: #000;
+    font-size: 14px;
+    font-family: "MHei","Microsoft YaHei",Arial,Helvetica,sans-serif;
+}
+
+.notificationWidget-item-body {
+    color: #72777d;
+    font-size: 14px;
+    font-family: "MHei","Microsoft YaHei",Arial,Helvetica,sans-serif;
+}
+
+.notificationWidget-item-date {
+    color: #72777d;
+    font-size: 12px;
+    font-family: "MHei","Microsoft YaHei",Arial,Helvetica,sans-serif;
+    text-align: right;
+}

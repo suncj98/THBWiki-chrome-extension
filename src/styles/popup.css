@@ -14,12 +14,12 @@
     right: 6px;
 }
 
-.notificationWidget-item-markRead >img {
+.notificationWidget-item-markRead>img {
     filter: grayscale(100%);
     opacity: 0.6;
 }
 
-.notificationWidget-item-markRead >img:hover {
+.notificationWidget-item-markRead>img:hover {
     filter: none;
     opacity: 1;
 }
@@ -27,27 +27,53 @@
 .notificationWidget-item-content {
     display: inline-block;
     margin: auto auto auto 24px;
+    width: 97%;
 }
 
-.notificationWidget-item-content >a {
-    text-decoration:none;
+.notificationWidget-item-content>a {
+    text-decoration: none;
 }
 
 .notificationWidget-item-header {
     color: #000;
     font-size: 14px;
-    font-family: "MHei","Microsoft YaHei",Arial,Helvetica,sans-serif;
+    font-family: "MHei", "Microsoft YaHei", Arial, Helvetica, sans-serif;
 }
 
 .notificationWidget-item-body {
     color: #72777d;
     font-size: 14px;
-    font-family: "MHei","Microsoft YaHei",Arial,Helvetica,sans-serif;
+    font-family: "MHei", "Microsoft YaHei", Arial, Helvetica, sans-serif;
 }
 
 .notificationWidget-item-date {
     color: #72777d;
     font-size: 12px;
-    font-family: "MHei","Microsoft YaHei",Arial,Helvetica,sans-serif;
+    font-family: "MHei", "Microsoft YaHei", Arial, Helvetica, sans-serif;
     text-align: right;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    border-radius: 5px;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
+    background: #66ccff;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
+    background: #66ccffd0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #19aec5;
+}
+
+::-webkit-scrollbar-thumb:active {
+    background: #1084968e;
 }

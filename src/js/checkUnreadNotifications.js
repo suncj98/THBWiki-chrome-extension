@@ -1,5 +1,5 @@
 function checkUnreadNotificationNum(username) {
-    if(username !== null) {
+    if (username !== null) {
         $.ajax({
             url: 'https://thwiki.cc/api.php',
             data: {
@@ -15,13 +15,12 @@ function checkUnreadNotificationNum(username) {
             },
             dataType: 'json',
             success: function (result) {
-                console.log(result);
                 if (result.hasOwnProperty("query") &&
                     result.query.hasOwnProperty("notifications")) {
                     if (result.query.notifications.count === "0") {
-                        chrome.browserAction.setBadgeText({text: ""});
+                        chrome.browserAction.setBadgeText({ text: "" });
                     } else {
-                        chrome.browserAction.setBadgeText({text: String(result.query.notifications.count)});
+                        chrome.browserAction.setBadgeText({ text: String(result.query.notifications.count) });
                     }
                 }
             }
@@ -48,9 +47,9 @@ function checkUnreadNotificationList() {
             if (result.hasOwnProperty("query") &&
                 result.query.hasOwnProperty("notifications")) {
                 if (result.query.notifications.count === "0") {
-                    chrome.browserAction.setBadgeText({text: ""});
+                    chrome.browserAction.setBadgeText({ text: "" });
                 } else {
-                    chrome.browserAction.setBadgeText({text: String(result.query.notifications.count)});
+                    chrome.browserAction.setBadgeText({ text: String(result.query.notifications.count) });
                     renderNotificationList(result.query.notifications.list);
                 }
             }
@@ -62,14 +61,14 @@ function renderNotificationList(list) {
     for (let i = list.length - 1; i >= 0; i--) {
         let notification = list[i];
         $("#notificationWidget_list")
-        //a notification item
+            //a notification item
             .append($("<li class='notificationWidget-item list-group-item list-group-item-action'></li>")
                 //icon
                 .append($("<img class='notificationWidget-item-icon'/>")
                     .attr("src", "../images/" + notification["*"].icon + ".png")
                     .attr("alt", notification["*"].icon))
                 //set read
-                .append($("<a title='标记为已读' href='#' class='notificationWidget-item-markRead'></a>")
+                .append($("<a title='标记为已读' href='#' class='notificationWidget-item-markRead' data-id='" + notification.id + "'></a>")
                     .append($("<img src='../images/baseline-check_circle_outline.png' alt='read'/>")))
                 //content container
                 .append($("<div class='notificationWidget-item-content'></div>")
@@ -89,4 +88,45 @@ function renderNotificationList(list) {
             createTab(notification["*"].links.primary.url);
         });
     }
+    $(".notificationWidget-item-markRead").click(function () {
+        getWIKIActionToken(e => {
+            let id = $(this).data("id");
+            let token = e;
+            let item = $(this).parent();
+            $.ajax({
+                url: 'https://thwiki.cc/api.php',
+                type: "POST",
+                data: {
+                    action: "echomarkread",
+                    token: token,
+                    list:id,
+                    format: "json",
+                    formatversion: 2,
+                },
+                dataType:"json",
+                success: (result) => {
+                    item.remove();
+                    checkUnreadNotificationNum();
+                }
+            });
+        });
+    });
+}
+
+function getWIKIActionToken(cb) {
+    $.ajax({
+        url: 'https://thwiki.cc/api.php',
+        data: {
+            action: "query",
+            format: "json",
+            formatversion: 2,
+            meta: "tokens",
+        },
+        dataType: 'json',
+        success: (result)=>{
+            // return the wiki csrftoken
+            let token = result.query.tokens.csrftoken;
+            return cb(token);
+        }
+    });
 }

@@ -6,8 +6,9 @@ checkLogin(doPopup);
 
 function doPopup(username) {
     if (username !== null) {
+        username=username.replace("+","_");
         $("#btn_login").text(function () {
-            return username;
+            return username.replace("_"," ");
         }).click(function () {
             newURL = "https://thwiki.cc/用户:" + username;
             chrome.tabs.create({url: newURL});

@@ -43,16 +43,41 @@ function checkUnreadNotificationList() {
             notfilter: "!read"
         },
         dataType: 'json',
-        success: function (result) {
+        success: (result) => {
             if (result.hasOwnProperty("query") &&
                 result.query.hasOwnProperty("notifications")) {
                 if (result.query.notifications.count === "0") {
                     chrome.browserAction.setBadgeText({ text: "" });
                 } else {
                     chrome.browserAction.setBadgeText({ text: String(result.query.notifications.count) });
+                    $("#notificationWidget_list").append($("<a href='#' id='notificationWidget_all_markRead' class='btn btn-info'>标记全部已读</a>"))
                     renderNotificationList(result.query.notifications.list);
                 }
             }
+            $("#notificationWidget_all_markRead").click(() => {
+                let nfs = $("#notificationWidget_list li .notificationWidget-item-markRead");
+                let list = "";
+                for (var i = 0; i < nfs.length; i++) {
+                    let item = $(nfs[i]);
+                    list += item.data("id");
+                    if (i < nfs.length - 1) {
+                        list += "|";
+                    }
+                };
+                getWIKIActionToken(token => {
+                    markNotification({ list: list, token: token }, result => {
+                        if (!result.error && result.query.echomarkread.result) {
+                            if (result.query.echomarkread.result == "success") {
+                                // remove marked info
+                                $("#notificationWidget_list").fadeOut(() => {
+                                    $("#notificationWidget_list").clear();
+                                });
+                            }
+                        }
+                        checkUnreadNotificationNum();
+                    })
+                });
+            });
         }
     });
 }
@@ -89,26 +114,20 @@ function renderNotificationList(list) {
         });
     }
     $(".notificationWidget-item-markRead").click(function () {
-        getWIKIActionToken(e => {
+        getWIKIActionToken(token => {
             let id = $(this).data("id");
-            let token = e;
             let item = $(this).parent();
-            $.ajax({
-                url: 'https://thwiki.cc/api.php',
-                type: "POST",
-                data: {
-                    action: "echomarkread",
-                    token: token,
-                    list:id,
-                    format: "json",
-                    formatversion: 2,
-                },
-                dataType:"json",
-                success: (result) => {
-                    item.remove();
-                    checkUnreadNotificationNum();
+            markNotification({ list: id, token: token }, result => {
+                if (!result.error && result.query.echomarkread.result) {
+                    if (result.query.echomarkread.result == "success") {
+                        // remove marked info
+                        item.fadeOut(() => {
+                            item.remove();
+                        });
+                    }
                 }
-            });
+                checkUnreadNotificationNum();
+            })
         });
     });
 }
@@ -123,10 +142,31 @@ function getWIKIActionToken(cb) {
             meta: "tokens",
         },
         dataType: 'json',
-        success: (result)=>{
+        success: (result) => {
             // return the wiki csrftoken
             let token = result.query.tokens.csrftoken;
             return cb(token);
+        },
+        fail: function () {
+            return cb("");
+        }
+    });
+}
+
+function markNotification(data, cb) {
+    $.ajax({
+        url: 'https://thwiki.cc/api.php',
+        type: "POST",
+        data: {
+            action: "echomarkread",
+            token: data.token,
+            list: data.list,
+            format: "json",
+            formatversion: 2,
+        },
+        dataType: "json",
+        success: (result) => {
+            return cb(result);
         }
     });
 }

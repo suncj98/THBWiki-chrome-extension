@@ -7,7 +7,7 @@ function checkLogin(cbUsername) {
         } else {
             chrome.browserAction.setIcon({path: "../images/logo-32-bw.png"});
             chrome.browserAction.setBadgeText({text: ""});
-            cbUsername = null;
+            cbUsername(null);
         }
     });
 }

@@ -38,12 +38,14 @@
     color: #000;
     font-size: 14px;
     font-family: "MHei", "Microsoft YaHei", Arial, Helvetica, sans-serif;
+    width: 95%;
 }
 
 .notificationWidget-item-body {
     color: #72777d;
     font-size: 14px;
     font-family: "MHei", "Microsoft YaHei", Arial, Helvetica, sans-serif;
+    width: 95%;
 }
 
 .notificationWidget-item-date {

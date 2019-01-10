@@ -15,12 +15,18 @@ function checkUnreadNotificationNum(username) {
             },
             dataType: 'json',
             success: function (result) {
-                if (result.hasOwnProperty("query") &&
-                    result.query.hasOwnProperty("notifications")) {
-                    if (result.query.notifications.count === "0") {
+                if (result.query && result.query.notifications) {
+                    var ncount = result.query.notifications.count;
+                    if (ncount === "0") {
                         chrome.browserAction.setBadgeText({ text: "" });
                     } else {
-                        chrome.browserAction.setBadgeText({ text: String(result.query.notifications.count) });
+                        chrome.browserAction.getBadgeText({}, res => {
+                            let count = res ? res : 0;
+                            if (count < ncount) {
+                                new Notification("Messages from THBWiki",{body:"You have " + ncount + " unread messages.",icon:"../images/logo-128.png"});
+                            }
+                            chrome.browserAction.setBadgeText({ text: String(ncount) });
+                        });
                     }
                 }
             }
@@ -50,7 +56,7 @@ function checkUnreadNotificationList() {
                     chrome.browserAction.setBadgeText({ text: "" });
                 } else {
                     chrome.browserAction.setBadgeText({ text: String(result.query.notifications.count) });
-                    $("#notificationWidget_list").append($("<a href='#' id='notificationWidget_all_markRead' class='btn btn-info'>标记全部已读</a>"))
+                    $("#notificationWidget_list").append($("<a href='#' id='notificationWidget_all_markRead' class='btn btn-info'>Mark all as read</a>"))
                     renderNotificationList(result.query.notifications.list);
                 }
             }
@@ -70,7 +76,7 @@ function checkUnreadNotificationList() {
                             if (result.query.echomarkread.result == "success") {
                                 // remove marked info
                                 $("#notificationWidget_list").fadeOut(() => {
-                                    $("#notificationWidget_list").clear();
+                                    $("#notificationWidget_list li").clear();
                                 });
                             }
                         }

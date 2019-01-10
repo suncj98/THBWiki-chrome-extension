@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
 
@@ -7,40 +8,29 @@
     <link href="../libs/bootstrap-4.2.1-dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="../libs/bootstrap-4.2.1-dist/js/bootstrap.min.js"></script>
 
-    <link rel="stylesheet" href="../styles/popup.css" type="text/css"/>
+    <link rel="stylesheet" href="../styles/popup.css" type="text/css" />
 
     <script src="../js/util.js"></script>
     <script src="../js/checkLogin.js"></script>
     <script src="../js/checkUnreadNotifications.js"></script>
 </head>
-<body style="width: 400px">
-<div class="menu-container">
-    <button
-            type="button"
-            class="btn btn-outline-primary"
-            id="btn_openSite"
-    >
-        THBWiki主页
-    </button>
-    <button
-            type="button"
-            class="btn btn-outline-primary"
-            id="btn_login"
-    >
-        登录THBWiki
-    </button>
-</div>
 
-<div class="notificationWidget">
-    <div class="notificationWidget-header">
-        <!--<span>未读通知</span>-->
-        <!--<span>标记所有为已读</span>-->
+<body style="width: 400px">
+    <div class="menu-container">
+        <button type="button" class="btn btn-outline-primary" id="btn_openSite">
+            THBWiki主页
+        </button>
+        <button type="button" class="btn btn-outline-primary" id="btn_login">
+            登录THBWiki
+        </button>
     </div>
 
-    <ul id="notificationWidget_list" class="notificationWidget-list list-group">
-    </ul>
-</div>
+    <div class="notificationWidget">
+        <ul id="notificationWidget_list" class="notificationWidget-list list-group">
+        </ul>
+    </div>
 
-<script src="../js/popup.js"></script>
+    <script src="../js/popup.js"></script>
 </body>
+
 </html>

@@ -1,6 +1,6 @@
 {
   "name": "THBWiki Ext",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "description": "An unofficial extension for THBWiki.",
   "manifest_version": 2,
   "permissions": [
@@ -9,14 +9,15 @@
     "cookies",
     "http://thwiki.cc/*",
     "https://thwiki.cc/*",
-    "notifications"
+    "notifications",
+    "alarms"
   ],
   "homepage_url": "https://github.com/15PotatoShreds/THBWiki-chrome-extension",
   "background": {
     "page": "./html/background.html"
   },
   "browser_action": {
-    "default_title": "THBWiki Ext",
+    "default_title": "THBWiki",
     "default_icon": "images/logo-32-bw.png",
     "default_popup": "./html/popup.html"
   },

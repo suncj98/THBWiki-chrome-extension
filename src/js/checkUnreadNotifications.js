@@ -14,16 +14,22 @@ function checkUnreadNotificationNum(username) {
                 notfilter: "!read"
             },
             dataType: 'json',
-            success: function (result) {
+            success: (result) => {
                 if (result.query && result.query.notifications) {
                     var ncount = result.query.notifications.count;
                     if (ncount === "0") {
                         chrome.browserAction.setBadgeText({ text: "" });
                     } else {
                         chrome.browserAction.getBadgeText({}, res => {
-                            let count = res ? res : 0;
+                            let count = res != "" ? res : 0;
                             if (count < ncount) {
-                                new Notification("Messages from THBWiki",{body:"You have " + ncount + " unread messages.",icon:"../images/logo-128.png"});
+                                let options = {
+                                    body: "You have " + ncount + " unread messages.",
+                                    icon: "../images/logo-128.png",
+                                    tag: "THBWiki",
+                                    renotify: true
+                                };
+                                new Notification("Messages from THBWiki", options);
                             }
                             chrome.browserAction.setBadgeText({ text: String(ncount) });
                         });
@@ -50,8 +56,7 @@ function checkUnreadNotificationList() {
         },
         dataType: 'json',
         success: (result) => {
-            if (result.hasOwnProperty("query") &&
-                result.query.hasOwnProperty("notifications")) {
+            if (result.query && result.query.notifications) {
                 if (result.query.notifications.count === "0") {
                     chrome.browserAction.setBadgeText({ text: "" });
                 } else {
@@ -76,7 +81,7 @@ function checkUnreadNotificationList() {
                             if (result.query.echomarkread.result == "success") {
                                 // remove marked info
                                 $("#notificationWidget_list").fadeOut(() => {
-                                    $("#notificationWidget_list li").clear();
+                                    $("#notificationWidget_list").empty();
                                 });
                             }
                         }
@@ -153,7 +158,7 @@ function getWIKIActionToken(cb) {
             let token = result.query.tokens.csrftoken;
             return cb(token);
         },
-        fail: function () {
+        fail: () => {
             return cb("");
         }
     });

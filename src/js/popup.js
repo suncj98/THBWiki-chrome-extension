@@ -10,5 +10,17 @@ function doPopup(username) {
         newURL = username ? "https://thwiki.cc/用户:" + text.replace(" ", "_") : "https://thwiki.cc/特殊:用户登录";
         chrome.tabs.create({ url: newURL });
     });
-    if (username) checkUnreadNotificationList();
+    if (username)
+    {
+        $("#unread-tab").click(() => {
+            checkUnreadNotificationList();
+        });
+        $("#remind-tab").click(() => {
+            checkRemindNotificationList();
+        });
+        $("#msg-tab").click(() => {
+            checkMsgNotificationList();
+        });
+        $("#unread-tab").click();
+    }
 }

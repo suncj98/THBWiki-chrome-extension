@@ -7,8 +7,7 @@
     "contextMenus",
     "tabs",
     "cookies",
-    "http://thwiki.cc/*",
-    "https://thwiki.cc/*",
+    "*://thwiki.cc/*",
     "notifications",
     "alarms"
   ],
@@ -26,5 +25,15 @@
   },
   "omnibox": {
     "keyword": "thb"
-  }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://thwiki.cc/*"
+      ],
+      "js": ["./libs/jquery-3.3.1.min.js",
+        "./js/tools.js"
+      ]
+    }
+  ]
 }

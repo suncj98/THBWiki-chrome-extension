@@ -1,3 +1,17 @@
+body {
+    font-size: 0.8rem;
+}
+
+.tab-content {
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+.progress {
+    border-radius: 0;
+    height: 10px;
+}
+
 .notificationWidget-list {
     overflow-y: scroll;
     max-height: 320px;
@@ -48,11 +62,24 @@
     width: 95%;
 }
 
+.notificationWidget-item-category {
+    color: #61b2bf;
+    font-size: 12px;
+    font-family: "MHei", "Microsoft YaHei", Arial, Helvetica, sans-serif;
+    float: left;
+}
+
+.notificationWidget-item-category span+span:before {
+    content: "|\00a0";
+    color: black;
+    padding: 0 5px;
+}
+
 .notificationWidget-item-date {
     color: #72777d;
     font-size: 12px;
     font-family: "MHei", "Microsoft YaHei", Arial, Helvetica, sans-serif;
-    text-align: right;
+    float: right;
 }
 
 ::-webkit-scrollbar {

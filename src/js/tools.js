@@ -1,4 +1,4 @@
-QueryString = {
+﻿QueryString = {
     data: {},
     Initial: function () {
         var aPairs, aTmp;
@@ -36,8 +36,7 @@ $().ready(() => {
             var songname = subtitle.replace("（" + groupname + "）", "");
             $(".mw-editform").before($("<pre><button type='button' id='btn-netlyric'>网易云歌词获取</button><ul id='songlist'></ul><div id='lyrictext' style='display:none;'><iframe allowTransparency='true' style='background-color:#66ccff;width:100%'></iframe><button id='lyricclose' type='button'>关闭</button></div></pre>"));
             $("#btn-netlyric").click(() => {
-                $.get("https://shinki.alicem.top:11451/search?limit=3&keywords=" + songname + "+" + groupname, (res) => {
-                    $("#songlist").before($("<p>请选择需要查询的曲子：</p>"));
+                $.get("https://www.alicem.top/KamiAPI/netname.php?limit=3&name=" + songname + "+" + groupname, (res) => {
                     res.result.songs.forEach((value) => {
                         $("#songlist").append($("<li>" + value.name + " <strong>" + value.album.name + "</strong>　<button data-id='" + value.id + "'>选择</button></li>"));
                     })

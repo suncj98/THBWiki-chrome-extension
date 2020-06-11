@@ -21,15 +21,15 @@ function checkUnreadNotificationNum(username) {
                         chrome.browserAction.setBadgeText({ text: "" });
                     } else {
                         chrome.browserAction.getBadgeText({}, res => {
-                            let count = res != "" ? res : 0;
+                            let count = res||0;
                             if (count < ncount) {
                                 let options = {
-                                    body: "You have " + ncount + " unread messages.",
+                                    body: "你有" + ncount + "条未读信息",
                                     icon: "../images/logo-128.png",
                                     tag: "THBWiki",
                                     renotify: true
                                 };
-                                new Notification("Messages from THBWiki", options);
+                                new Notification("来自THBWiki的信息", options);
                             }
                             chrome.browserAction.setBadgeText({ text: String(ncount) });
                         });
@@ -161,7 +161,7 @@ function checkMsgNotificationList() {
 
 function renderUnreadNotificationList(list) {
     var topic = ["user-rights", "social-rel"];
-    var msg = ["article-linked", "achiev"];
+    var msg = ["article-linked", "achiev", "system","flowthread"];
     for (let i = list.length - 1; i >= 0; i--) {
         let notification = list[i];
         var type = "";
@@ -190,6 +190,13 @@ function renderUnreadNotificationList(list) {
                     break;
                 case "achiev":
                     info += "<span>成就系统</span>";
+                    break;
+                case "system":
+                    info += "<span>系统</span>";
+                    break;
+                case "flowthread":
+                    info += "<span>评论</span>";
+                    info += "<span>操作人：<font color='#66aaff'>" + notification.agent.name + "</font></span>";
                     break;
             }
             type = "一般通知";
@@ -314,6 +321,13 @@ function renderMsgNotificationList(list) {
                         break;
                     case "achiev":
                         info += "<span>成就系统</span>";
+                        break;
+                    case "system":
+                        info += "<span>系统</span>";
+                        break;
+                    case "flowthread":
+                        info += "<span>评论</span>";
+                        info += "<span>操作人：<font color='#66aaff'>" + notification.agent.name + "</font></span>";
                         break;
                 }
                 break;

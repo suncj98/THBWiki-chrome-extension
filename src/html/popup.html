@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
 
     <script src="../libs/jquery-3.3.1.min.js"></script>
+    <script src="../libs/vue.min.js"></script>
     <link href="../libs/bootstrap-4.2.1-dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="../libs/bootstrap-4.2.1-dist/js/bootstrap.min.js"></script>
 
@@ -12,59 +13,133 @@
 
     <script src="../js/util.js"></script>
     <script src="../js/checkLogin.js"></script>
-    <script src="../js/checkUnreadNotifications.js"></script>
+    <script src="../js/checkUnreadNotifications.vue.js"></script>
 </head>
 
 <body style="width: 400px">
-    <div class="menu-container">
-        <button type="button" class="btn btn-outline-primary btn-sm" id="btn_openSite">
-            THBWiki主页
-        </button>
-        <button type="button" class="btn btn-outline-info btn-sm" id="btn_login">
-            登录THBWiki
-        </button>
-    </div>
-
-    <div class="notificationWidget">
-        <ul class="nav nav-tabs" id="nwTab" role="tablist">
-            <li class="nav-item">
-                <a class="nav-link active" id="unread-tab" data-toggle="tab" href="#unread" role="tab">未读消息</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="remind-tab" data-toggle="tab" href="#remind" role="tab">提醒</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="msg-tab" data-toggle="tab" href="#msg" role="tab">通知</a>
-            </li>
-        </ul>
-        <div class="tab-content" id="nwTabContent">
-            <div class="tab-pane fade show active" id="unread" role="tabpanel">
-                <div id="unreadPro" class="progress" style="display:none;">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%"></div>
+    <div id="app">
+        <div class="menu-container">
+            <button type="button" class="btn btn-outline-primary btn-sm" @click="enterTHB(false)">
+                THBWiki主页
+            </button>
+            <button type="button" class="btn btn-outline-info btn-sm" v-text="UserName||'登录THBWiki'"
+                @Click="enterTHB(true)">
+            </button>
+            THB插件版本：{{Version}}
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" v-model="Search" placeholder="请输入关键词" @keyup.13="searchTHB">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="button" @click="searchTHB">搜索</button>
                 </div>
-                <ul id="notificationWidget_unreadList" class="notificationWidget-list list-group">
-                    <li class='notificationWidget-item list-group-item list-group-item-action' id='nounread'>暂无未读消息</li>
-                </ul>
-            </div>
-            <div class="tab-pane fade in" id="remind" role="tabpanel">
-                <div id="remindPro" class="progress" style="display:none;">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%"></div>
-                </div>
-                <ul id="notificationWidget_remindList" class="notificationWidget-list list-group">
-                    <li class='notificationWidget-item list-group-item list-group-item-action' id='notopic'>暂无已读提醒</li>
-                </ul>
-            </div>
-            <div class="tab-pane fade in" id="msg" role="tabpanel">
-                <div id="msgPro" class="progress" style="display:none;">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%"></div>
-                </div>
-                <ul id="notificationWidget_msgList" class="notificationWidget-list list-group">
-                    <li class='notificationWidget-item list-group-item list-group-item-action' id='nomsg'>暂无已读通知</li>
-                </ul>
             </div>
         </div>
-    </div>
 
+        <div class="notificationWidget">
+            <ul class="nav nav-tabs" id="nwTab" role="tablist">
+                <li class="nav-item">
+                    <a :class="'nav-link '+(Tab==0?'active':'')" @Click="changeTab(0)" href="#">未读消息</a>
+                </li>
+                <li class="nav-item">
+                    <a :class="'nav-link '+(Tab==1?'active':'')" @Click="changeTab(1)" href="#">提醒</a>
+                </li>
+                <li class="nav-item">
+                    <a :class="'nav-link '+(Tab==2?'active':'')" @Click="changeTab(2)" href="#">通知</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="nwTabContent">
+                <div :class="'tab-pane fade '+(Tab==0?'show active':'in')">
+                    <div class="progress" v-if="loadding">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                            style="width: 100%"></div>
+                    </div>
+                    <ul class="notificationWidget-list list-group" v-else>
+                        <a v-if="UnreadNotificationList.length>0" href='#' class='btn btn-info'
+                            @click="markAllRead">全部已读</a>
+                        <li v-if="UnreadNotificationList.length<=0"
+                            class='notificationWidget-item list-group-item list-group-item-action'>暂无未读消息
+                        </li>
+                        <li v-else class='notificationWidget-item list-group-item list-group-item-action'
+                            v-for="UnreadNotification in UnreadNotificationList" @click="markRead(UnreadNotification.url)">
+                            <img class='notificationWidget-item-icon' :src="'../images/'+UnreadNotification.icon+'.png'"
+                                :alt="UnreadNotification.icon" />
+                            <div class='notificationWidget-item-content'>
+                                <a href='#'>
+                                    <div class='notificationWidget-item-header' v-html="UnreadNotification.header">
+                                    </div>
+                                    <div class='notificationWidget-item-body' v-html="UnreadNotification.body"></div>
+                                    <div class='notificationWidget-item-category'>
+                                      <span style='color:#777;' v-text="UnreadNotification.type"></span>
+                                      <span v-text="UnreadNotification.categoryname"></span>
+                                      <span v-if="UnreadNotification.agentname">操作人：<font color='#66aaff'>{{UnreadNotification.agentname}}</font></span>
+                                    </div>
+                                    <div class='notificationWidget-item-date' v-html="UnreadNotification.date"></div>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div :class="'tab-pane fade '+(Tab==1?'show active':'in')">
+                    <div id="remindPro" class="progress" v-if="loadding">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                            style="width: 100%"></div>
+                    </div>
+                    <ul class="notificationWidget-list list-group" v-else>
+                        <li v-if="RemindNotificationList.length<=0"
+                            class='notificationWidget-item list-group-item list-group-item-action'>暂无已读提醒
+                        </li>
+                        <li v-else class='notificationWidget-item list-group-item list-group-item-action'
+                        v-for="RemindNotification in RemindNotificationList" @click="markRead(RemindNotification.url)">
+                        <img class='notificationWidget-item-icon' :src="'../images/'+RemindNotification.icon+'.png'"
+                            :alt="RemindNotification.icon" />
+                        <div class='notificationWidget-item-content'>
+                            <a href='#'>
+                                <div class='notificationWidget-item-header' v-html="RemindNotification.header">
+                                </div>
+                                <div class='notificationWidget-item-body' v-html="RemindNotification.body"></div>
+                                    <div class='notificationWidget-item-category'>
+                                      <span style='color:#777;' v-text="RemindNotification.type"></span>
+                                      <span v-text="RemindNotification.categoryname"></span>
+                                      <span v-if="RemindNotification.agentname">操作人：<font color='#66aaff'>{{RemindNotification.agentname}}</font></span>
+                                    </div>
+                                <div class='notificationWidget-item-date' v-html="RemindNotification.date"></div>
+                            </a>
+                        </div>
+                    </li>
+                    </ul>
+                </div>
+                <div :class="'tab-pane fade '+(Tab==2?'show active':'in')">
+                    <div id="msgPro" class="progress" v-if="loadding">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                            style="width: 100%"></div>
+                    </div>
+                    <ul class="notificationWidget-list list-group" v-else>
+                        <li v-if="MsgNotificationList.length<=0"
+                            class='notificationWidget-item list-group-item list-group-item-action'>暂无已读通知
+                        </li>
+                        <li v-else class='notificationWidget-item list-group-item list-group-item-action'
+                        v-for="MsgNotification in MsgNotificationList" @click="markRead(MsgNotification.url)">
+                        <img class='notificationWidget-item-icon' :src="'../images/'+MsgNotification.icon+'.png'"
+                            :alt="MsgNotification.icon" />
+                        <div class='notificationWidget-item-content'>
+                            <a href='#'>
+                                <div class='notificationWidget-item-header' v-html="MsgNotification.header">
+                                </div>
+                                <div class='notificationWidget-item-body' v-html="MsgNotification.body"></div>
+                                    <div class='notificationWidget-item-category'>
+                                      <span style='color:#777;' v-text="MsgNotification.type"></span>
+                                      <span v-text="MsgNotification.categoryname"></span>
+                                      <span v-if="MsgNotification.agentname">操作人：<font color='#66aaff'>{{MsgNotification.agentname}}</font></span>
+                                    </div>
+                                <div class='notificationWidget-item-date' v-html="MsgNotification.date"></div>
+                            </a>
+                        </div>
+                    </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
     <script src="../js/popup.js"></script>
 </body>
 

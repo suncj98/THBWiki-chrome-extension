@@ -32,7 +32,7 @@
         "*://thwiki.cc/*"
       ],
       "js": ["./libs/jquery-3.3.1.min.js",
-        "./libs/vue.js",
+        "./libs/vue.min.js",
         "./js/tools.js"
       ]
     }

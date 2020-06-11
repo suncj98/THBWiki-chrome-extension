@@ -1,6 +1,6 @@
 {
   "name": "THBWiki Ext",
-  "version": "0.3.6",
+  "version": "0.4.0",
   "description": "An unofficial extension for THBWiki.",
   "manifest_version": 2,
   "permissions": [
@@ -11,7 +11,7 @@
     "notifications",
     "alarms"
   ],
-  "homepage_url": "https://github.com/15PotatoShreds/THBWiki-chrome-extension",
+  "homepage_url": "https://github.com/FrostColumns/THBWiki-chrome-extension",
   "background": {
     "page": "./html/background.html"
   },
@@ -32,8 +32,10 @@
         "*://thwiki.cc/*"
       ],
       "js": ["./libs/jquery-3.3.1.min.js",
+        "./libs/vue.js",
         "./js/tools.js"
       ]
     }
-  ]
+  ],
+  "content_security_policy": "style-src 'self' 'unsafe-inline';script-src 'self' 'unsafe-eval'; object-src 'self' ;"
 }

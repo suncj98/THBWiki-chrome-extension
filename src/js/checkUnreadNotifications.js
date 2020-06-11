@@ -21,15 +21,15 @@ function checkUnreadNotificationNum(username) {
                         chrome.browserAction.setBadgeText({ text: "" });
                     } else {
                         chrome.browserAction.getBadgeText({}, res => {
-                            let count = res != "" ? res : 0;
+                            let count = res||0;
                             if (count < ncount) {
                                 let options = {
-                                    body: "You have " + ncount + " unread messages.",
+                                    body: "你有" + ncount + "条未读信息",
                                     icon: "../images/logo-128.png",
                                     tag: "THBWiki",
                                     renotify: true
                                 };
-                                new Notification("Messages from THBWiki", options);
+                                new Notification("来自THBWiki的信息", options);
                             }
                             chrome.browserAction.setBadgeText({ text: String(ncount) });
                         });

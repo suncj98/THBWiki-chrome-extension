@@ -67,8 +67,11 @@
                                     <div class='notificationWidget-item-header' v-html="UnreadNotification.header">
                                     </div>
                                     <div class='notificationWidget-item-body' v-html="UnreadNotification.body"></div>
-                                    <div class='notificationWidget-item-category'
-                                        v-html="UnreadNotification.categoryname"></div>
+                                    <div class='notificationWidget-item-category'>
+                                      <span style='color:#777;' v-text="UnreadNotification.type"></span>
+                                      <span v-text="UnreadNotification.categoryname"></span>
+                                      <span v-if="UnreadNotification.agentname">操作人：<font color='#66aaff'>{{UnreadNotification.agentname}}</font></span>
+                                    </div>
                                     <div class='notificationWidget-item-date' v-html="UnreadNotification.date"></div>
                                 </a>
                             </div>
@@ -93,8 +96,11 @@
                                 <div class='notificationWidget-item-header' v-html="RemindNotification.header">
                                 </div>
                                 <div class='notificationWidget-item-body' v-html="RemindNotification.body"></div>
-                                <div class='notificationWidget-item-category'
-                                    v-html="RemindNotification.categoryname"></div>
+                                    <div class='notificationWidget-item-category'>
+                                      <span style='color:#777;' v-text="RemindNotification.type"></span>
+                                      <span v-text="RemindNotification.categoryname"></span>
+                                      <span v-if="RemindNotification.agentname">操作人：<font color='#66aaff'>{{RemindNotification.agentname}}</font></span>
+                                    </div>
                                 <div class='notificationWidget-item-date' v-html="RemindNotification.date"></div>
                             </a>
                         </div>
@@ -119,8 +125,11 @@
                                 <div class='notificationWidget-item-header' v-html="MsgNotification.header">
                                 </div>
                                 <div class='notificationWidget-item-body' v-html="MsgNotification.body"></div>
-                                <div class='notificationWidget-item-category'
-                                    v-html="MsgNotification.categoryname"></div>
+                                    <div class='notificationWidget-item-category'>
+                                      <span style='color:#777;' v-text="MsgNotification.type"></span>
+                                      <span v-text="MsgNotification.categoryname"></span>
+                                      <span v-if="MsgNotification.agentname">操作人：<font color='#66aaff'>{{MsgNotification.agentname}}</font></span>
+                                    </div>
                                 <div class='notificationWidget-item-date' v-html="MsgNotification.date"></div>
                             </a>
                         </div>

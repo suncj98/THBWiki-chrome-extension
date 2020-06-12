@@ -59,19 +59,21 @@
                             class='notificationWidget-item list-group-item list-group-item-action'>暂无未读消息
                         </li>
                         <li v-else class='notificationWidget-item list-group-item list-group-item-action'
-                            v-for="UnreadNotification in UnreadNotificationList"
-                            @click="markRead(UnreadNotification.url)">
+                            v-for="UnreadNotification in UnreadNotificationList" @click="Read(UnreadNotification.url)">
                             <img class='notificationWidget-item-icon' :src="'../images/'+UnreadNotification.icon+'.png'"
                                 :alt="UnreadNotification.icon" />
+                            <a title='标记为已读' href='#' class='notificationWidget-item-markRead'
+                                @click.stop="markRead(UnreadNotification.id)"><img src='../images/baseline-check_circle_outline.png' alt='read'/></a>
                             <div class='notificationWidget-item-content'>
                                 <div class='notificationWidget-item-header' v-html="UnreadNotification.header">
                                 </div>
                                 <div class='notificationWidget-item-body' v-html="UnreadNotification.body"></div>
                                 <div class='notificationWidget-item-category'>
-                                    <span style='color:#777;' v-text="UnreadNotification.type"></span>
+                                    <span v-if="UnreadNotification.type" style='color:#777;'
+                                        v-text="UnreadNotification.type"></span>
                                     <span v-text="UnreadNotification.categoryname"></span>
                                     <span v-if="UnreadNotification.agentname">操作人：<a href="#"
-                                            @click.stop="markRead('http://thwiki.cc/用户:'+UnreadNotification.agentname)">{{UnreadNotification.agentname}}</a></span>
+                                            @click.stop="Read('http://thwiki.cc/用户:'+UnreadNotification.agentname)">{{UnreadNotification.agentname}}</a></span>
                                 </div>
                                 <div class='notificationWidget-item-date' v-html="UnreadNotification.date"></div>
                             </div>
@@ -88,8 +90,7 @@
                             class='notificationWidget-item list-group-item list-group-item-action'>暂无已读提醒
                         </li>
                         <li v-else class='notificationWidget-item list-group-item list-group-item-action'
-                            v-for="RemindNotification in RemindNotificationList"
-                            @click="markRead(RemindNotification.url)">
+                            v-for="RemindNotification in RemindNotificationList" @click="Read(RemindNotification.url)">
                             <img class='notificationWidget-item-icon' :src="'../images/'+RemindNotification.icon+'.png'"
                                 :alt="RemindNotification.icon" />
                             <div class='notificationWidget-item-content'>
@@ -97,10 +98,9 @@
                                 </div>
                                 <div class='notificationWidget-item-body' v-html="RemindNotification.body"></div>
                                 <div class='notificationWidget-item-category'>
-                                    <span style='color:#777;' v-text="RemindNotification.type"></span>
                                     <span v-text="RemindNotification.categoryname"></span>
                                     <span v-if="RemindNotification.agentname">操作人：<a href="#"
-                                        @click.stop="markRead('http://thwiki.cc/用户:'+RemindNotification.agentname)">{{RemindNotification.agentname}}</a></span>
+                                            @click.stop="Read('http://thwiki.cc/用户:'+RemindNotification.agentname)">{{RemindNotification.agentname}}</a></span>
                                 </div>
                                 <div class='notificationWidget-item-date' v-html="RemindNotification.date"></div>
                             </div>
@@ -117,7 +117,7 @@
                             class='notificationWidget-item list-group-item list-group-item-action'>暂无已读通知
                         </li>
                         <li v-else class='notificationWidget-item list-group-item list-group-item-action'
-                            v-for="MsgNotification in MsgNotificationList" @click="markRead(MsgNotification.url)">
+                            v-for="MsgNotification in MsgNotificationList" @click="Read(MsgNotification.url)">
                             <img class='notificationWidget-item-icon' :src="'../images/'+MsgNotification.icon+'.png'"
                                 :alt="MsgNotification.icon" />
                             <div class='notificationWidget-item-content'>
@@ -125,10 +125,9 @@
                                 </div>
                                 <div class='notificationWidget-item-body' v-html="MsgNotification.body"></div>
                                 <div class='notificationWidget-item-category'>
-                                    <span style='color:#777;' v-text="MsgNotification.type"></span>
                                     <span v-text="MsgNotification.categoryname"></span>
                                     <span v-if="MsgNotification.agentname">操作人：<a href="#"
-                                        @click.stop="markRead('http://thwiki.cc/用户:'+MsgNotification.agentname)">{{MsgNotification.agentname}}</a></span>
+                                            @click.stop="Read('http://thwiki.cc/用户:'+MsgNotification.agentname)">{{MsgNotification.agentname}}</a></span>
                                 </div>
                                 <div class='notificationWidget-item-date' v-html="MsgNotification.date"></div>
                             </div>

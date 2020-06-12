@@ -18,7 +18,7 @@ var app = new Vue({
         }, 'json');
         checkLogin((res) => {
             if (res) {
-                this.UserName = decodeURIComponent(res).replace('+',' ');
+                this.UserName = decodeURIComponent(res).replace('+', ' ');
                 this.getUnreadNotification();
             }
         });
@@ -95,8 +95,20 @@ var app = new Vue({
                 }
             });
         },
-        markRead(url) {
+        Read(url) {
             createTab(url);
+        },
+        markRead(id) {
+            getWIKIActionToken(token => {
+                markNotification({ list: id, token: token }, result => {
+                    if (!result.error && result.query.echomarkread.result) {
+                        if (result.query.echomarkread.result == "success") {
+                            checkUnreadNotificationNum();
+                            this.getUnreadNotification();
+                        }
+                    }
+                })
+            });
         },
         markAllRead() {
             getWIKIActionToken(token => {
@@ -104,11 +116,10 @@ var app = new Vue({
                 markNotification({ list: list, token: token }, result => {
                     if (!result.error && result.query.echomarkread.result) {
                         if (result.query.echomarkread.result == "success") {
-                            this.UnreadNotificationList = [];
+                            checkUnreadNotificationNum();
+                            this.getUnreadNotification();
                         }
                     }
-                    checkUnreadNotificationNum();
-                    this.getUnreadNotification();
                 })
             });
         },
@@ -119,8 +130,17 @@ var app = new Vue({
             };
             var msg = {
                 "article-linked": "页面链接",
+                "flowthread": "评论",
+                "flow-discussion": "讨论",
                 "achiev": "成就系统",
                 "system": "系统",
+                "system-noemail":"系统",
+                "thank-you-edit":"编辑"
+            };
+            var isUser = {
+                "user-rights": "权限变更",
+                "social-rel": "好友",
+                "article-linked": "页面链接",
                 "flowthread": "评论",
                 "flow-discussion": "讨论"
             };
@@ -128,9 +148,9 @@ var app = new Vue({
                 return {
                     id: v.id,
                     category: v.category,
-                    type: topic[v.category] ? "提醒" : (msg[v.category] ? "一般通知" : "未知"),
-                    categoryname: topic[v.category] || msg[v.category] || "未知",
-                    agentname: v.agent.name,
+                    type: topic[v.category] ? "提醒" : (msg[v.category] ? "通知" : ""),
+                    categoryname: topic[v.category] || msg[v.category] || "",
+                    agentname: isUser[v.category] ? v.agent.name : "",
                     icon: v["*"].icon,
                     header: v["*"].header,
                     body: v["*"].body,

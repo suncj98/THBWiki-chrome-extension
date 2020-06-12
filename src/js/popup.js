@@ -134,8 +134,8 @@ var app = new Vue({
                 "flow-discussion": "讨论",
                 "achiev": "成就系统",
                 "system": "系统",
-                "system-noemail":"系统",
-                "thank-you-edit":"编辑"
+                "system-noemail": "系统",
+                "thank-you-edit": "编辑"
             };
             var isUser = {
                 "user-rights": "权限变更",
@@ -157,7 +157,7 @@ var app = new Vue({
                     date: dateFormat(v.timestamp.mw),
                     url: v["*"].links.primary.url
                 }
-            }));
+            })).sort((v1, v2) => v1.date < v2.date ? 1 : -1);
         },
         searchTHB() {
             createTab(`https://thwiki.cc/index.php?search=${encodeURIComponent(this.Search)}&fulltext=1`);

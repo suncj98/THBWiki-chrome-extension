@@ -21,7 +21,7 @@ function checkUnreadNotificationNum(username) {
                         chrome.browserAction.setBadgeText({ text: "" });
                     } else {
                         chrome.browserAction.getBadgeText({}, res => {
-                            let count = res||0;
+                            let count = res || 0;
                             if (count < ncount) {
                                 let options = {
                                     body: "你有" + ncount + "条未读信息",
@@ -35,13 +35,14 @@ function checkUnreadNotificationNum(username) {
                         });
                     }
                 }
+            },
+            fail: () => {
             }
         });
     }
 }
 
-function checkUnreadNotification(cb)
-{
+function checkUnreadNotification(cb) {
     $.ajax({
         url: 'https://thwiki.cc/api.php',
         data: {
@@ -58,6 +59,9 @@ function checkUnreadNotification(cb)
         dataType: 'json',
         success: (result) => {
             return cb(result);
+        },
+        fail: () => {
+            return cb(null);
         }
     });
 }
@@ -70,7 +74,7 @@ function checkRemindNotification(cb) {
             format: "json",
             formatversion: 2,
             meta: "notifications",
-            notsections:"alert",
+            notsections: "alert",
             notformat: "model",
             notlimit: 25,
             notprop: "list|count",
@@ -80,6 +84,9 @@ function checkRemindNotification(cb) {
         dataType: 'json',
         success: (result) => {
             return cb(result);
+        },
+        fail: () => {
+            return cb(null);
         }
     });
 }
@@ -102,6 +109,9 @@ function checkMsgNotification(cb) {
         dataType: 'json',
         success: (result) => {
             return cb(result);
+        },
+        fail: () => {
+            return cb(null);
         }
     });
 }
@@ -141,6 +151,9 @@ function markNotification(data, cb) {
         dataType: "json",
         success: (result) => {
             return cb(result);
+        },
+        fail: () => {
+            return cb(null);
         }
     });
 }

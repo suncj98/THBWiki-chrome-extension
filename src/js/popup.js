@@ -18,7 +18,7 @@ var app = new Vue({
         }, 'json');
         checkLogin((res) => {
             if (res) {
-                this.UserName = res.replace('+', ' ');
+                this.UserName = decodeURIComponent(res).replace('+',' ');
                 this.getUnreadNotification();
             }
         });
@@ -26,7 +26,7 @@ var app = new Vue({
     methods: {
         enterTHB(User) {
             if (User) {
-                createTab(this.UserName ? `https://thwiki.cc/用户:${this.UserName.replace(" ", "_")}` : "https://thwiki.cc/特殊:用户登录");
+                createTab(this.UserName ? `https://thwiki.cc/用户:${this.UserName}` : "https://thwiki.cc/特殊:用户登录");
             }
             else {
                 createTab("https://thwiki.cc");
